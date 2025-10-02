@@ -1,2 +1,10 @@
 *.swp
 *.swo
+
+ros_ws/ros1_ws/build
+ros_ws/ros1_ws/devel
+ros_ws/ros1_ws/logs
+
+ros_ws/ros2_ws/build
+ros_ws/ros2_ws/devel
+ros_ws/ros2_ws/logs

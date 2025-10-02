@@ -14,6 +14,14 @@ volumes:
       type: none
       device: ./logs
 
+  ros_ws:
+    driver: local
+    driver_opts:
+      o: bind
+      type: bind
+      device: ../../ros_ws/ros1_ws/src
+
+
 services:
 
   roscore:
@@ -138,6 +146,28 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - logs:/etc/logs:consistent
 
+
+  develop:
+    image: ctumrs/mrs_uav_system:${MRS_UAV_SYSTEM_VERSION}
+    depends_on:
+      - roscore
+    network_mode: host
+    volumes:
+      - config:/etc/config:consistent
+        # mount the folders below to enable passing GUI to the host
+      - /dev/dri:/dev/dri
+      - ros_ws:/home/ros_ws:consistent
+    env_file:
+      - ./stack.env
+    environment:
+        DISPLAY: $DISPLAY
+    tty: true
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+          - |
+            source /opt/ros/noetic/setup.bash
+            waitForRos
+            rostopic list
 # alternative way of running the commands
     # entrypoint: ["/bin/bash", "-c"]
     # command:
